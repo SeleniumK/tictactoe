@@ -1,0 +1,28 @@
+#board{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: nowrap;
+}
+
+.row{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.cell{
+  background-color: #D3D3D3;
+  margin: 10px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.picked{
+  font-size: 72px;
+  font-family: sans-serif;
+}
