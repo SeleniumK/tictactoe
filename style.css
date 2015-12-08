@@ -12,7 +12,7 @@
   flex-wrap: nowrap;
 }
 
-.cell{
+.cell, .won{
   background-color: #D3D3D3;
   margin: 10px;
   width: 100px;
@@ -25,4 +25,15 @@
 .picked{
   font-size: 72px;
   font-family: sans-serif;
+}
+
+.won{
+  background-color: yellow;
+}
+
+#namePlate{
+  float: left;
+  margin: 0;
+  width: 200px;
+  height: 300px;
 }

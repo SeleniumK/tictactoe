@@ -1,88 +1,16 @@
 var board = document.getElementById('board');
+var namePlate = document.getElementById("namePlate");
 var activePlayer;
 
-
-function Player(name, playerId, markedSpots){
-  var self = this;
+function Player(name, playerId){
   this.name = name;
   this.playerId = playerId;
   this.selectedCells = [];
   this.winner = false;
-  this.markCell = function(target, targetId){
-    var marked = document.createElement('div')
-    marked.setAttribute("class", "picked");
-    marked.textContent = activePlayer.playerId;
-    target.appendChild(marked);
-  };
-  this.changeActivePlayer = function(){
-    if(activePlayer == playerX){
-      activePlayer = playerO;
-    } else if(activePlayer == playerO){
-      activePlayer = playerX;
-    }
-  };
-  this.makeMove = function(event){
-    var target = event.target;
-    var targetId = event.target.id.toString();
-    console.log(targetId);
-    if(!$(target).hasClass('cell')){
-      return;
-    }
-    if(!$(target).hasClass('picked')){
-      self.markCell(target);
-      checkBoard(targetId);
-      console.log("Did I win? " + activePlayer.winner);
-      activePlayer.selectedCells.push(targetId);
-      self.changeActivePlayer();
-    }
-  };
-}
-
-function checkWin(array){
-  if(array.length === 3){
-    activePlayer.winner = true;
+  this.display = function(){
+    namePlate.textContent = activePlayer.name + "'s Turn";
   }
 }
-
-function checkBoard(targetId){
-  var currentColumn = targetId.substring(0, 1);
-  var currentRow = targetId.substring(2, 3);
-  var winColumn = [targetId];
-  var winRow = [targetId];
-  var leftCross = [];
-  var rightCross = [];
-
-  if(currentRow === currentColumn){
-    leftCross.push(targetId);
-  }
-  if((parseInt(currentRow) + parseInt(currentColumn)) === 2 ){
-    rightCross.push(targetId);
-  }
-
-  for(var i = 0; i < activePlayer.selectedCells.length; i++){
-    var selectedCell = activePlayer.selectedCells[i];
-    var selectedColumn = selectedCell.substring(0, 1);
-    var selectedRow = selectedCell.substring(2, 3);
-
-    if (selectedRow == selectedColumn) {
-      leftCross.push(selectedCell);
-      checkWin(leftCross);
-    }
-    if((parseInt(selectedRow) + parseInt(selectedColumn)) === 2){
-      rightCross.push(selectedCell);
-      checkWin(rightCross);
-    }
-    if(currentColumn == selectedColumn){
-      winColumn.push(selectedCell);
-      checkWin(winColumn)
-    }
-    if(currentRow == selectedRow){
-      winRow.push(selectedCell);
-      checkWin(winRow);
-    }
-  }
-}
-
 
 var gameInit = {
   playerX: null,
@@ -92,13 +20,98 @@ var gameInit = {
     playerX = new Player(player1, "X");
     var player2 = prompt('Who is playing O\'s?');
     playerO = new Player(player2, "O");
+  },
+  startGame: function(){
+    gameInit.playerName();
+    activePlayer = playerX;
+    activePlayer.display();
+    board.addEventListener('click', turn.makeMove);
   }
 }
 
-function playGame(){
-  gameInit.playerName();
-  activePlayer = playerX;
-  board.addEventListener('click', activePlayer.makeMove);
+var turn = {
+  markCell: function(target, targetId){
+    var marked = document.createElement('div')
+    marked.setAttribute("class", "picked");
+    marked.textContent = activePlayer.playerId;
+    target.appendChild(marked);
+  },
+  changeActivePlayer: function(){
+    if(activePlayer.winner){
+      return;
+    }
+      if(activePlayer == playerX){
+        activePlayer = playerO;
+      } else if(activePlayer == playerO){
+        activePlayer = playerX;
+      }
+      activePlayer.display();
+  },
+  makeMove: function(event){
+    var target = event.target;
+    var targetId = event.target.id.toString();
+    if(!$(target).hasClass('cell')){
+      return;
+    }
+    if(!$(target).hasClass('picked')){
+      turn.markCell(target);
+      turn.checkBoard(targetId);
+      activePlayer.selectedCells.push(targetId);
+      turn.changeActivePlayer();
+    }
+  },
+  checkBoard: function(targetId){
+    var currentColumn = parseInt(targetId.substring(0, 1));
+    var currentRow = parseInt(targetId.substring(2, 3));
+    var winColumn = [targetId];
+    var winRow = [targetId];
+    var leftCross = [];
+    var rightCross = [];
+  //check for diagonals
+    if(currentRow === currentColumn){
+      leftCross.push(targetId);
+    }
+    if(currentRow + currentColumn === 2 ){
+      rightCross.push(targetId);
+    }
+    //check for win
+    for(var i = 0; i < activePlayer.selectedCells.length; i++){
+      var selectedCell = activePlayer.selectedCells[i];
+      var selectedColumn = parseInt(selectedCell.substring(0, 1));
+      var selectedRow = parseInt(selectedCell.substring(2, 3));
+
+      if (selectedRow === selectedColumn) {
+        leftCross.push(selectedCell);
+        turn.checkWin(leftCross);
+      }
+      if(selectedRow + selectedColumn === 2){
+        rightCross.push(selectedCell);
+        turn.checkWin(rightCross);
+      }
+      if(currentColumn === selectedColumn){
+        winColumn.push(selectedCell);
+        turn.checkWin(winColumn)
+      }
+      if(currentRow === selectedRow){
+        winRow.push(selectedCell);
+        turn.checkWin(winRow);
+      }
+    }
+  },
+  checkWin: function(array){
+    if(array.length === 3){
+      activePlayer.winner = true;
+      turn.endGame();
+      for(var i = 0; i < array.length; i++){
+      var cell = document.getElementById(array[i]);
+      cell.setAttribute("class", "won");
+      }
+    }
+  },
+  endGame: function(){
+    namePlate.textContent = "Game Over: "+ activePlayer.name + " Won!";
+    board.removeEventListener("click", turn.makeMove);
+  }
 }
 
-playGame();
+gameInit.startGame();
