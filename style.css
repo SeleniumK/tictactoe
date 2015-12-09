@@ -40,7 +40,7 @@ header{
   flex-wrap: nowrap;
 }
 
-.cell, .won{
+.cell, .clicked, .won{
   background-color: rgba(255,255,255,1);
   margin: 1.5%;
   width: 8vw;
@@ -53,6 +53,8 @@ header{
 .picked{
   font-size: 72px;
   font-family: sans-serif;
+  background-color: transparent;
+  pointer-events: none;
 }
 
 .won{

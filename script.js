@@ -13,51 +13,57 @@ function Player(name, playerId){
 }
 
 var gameInit = {
+  gameOver: false,
   playerX: null,
   playerO: null,
   playerName: function(){
     var player1 = prompt('Who is playing X\'s?');
-    playerX = new Player(player1, "X");
+    gameInit.playerX = new Player(player1, "X");
     var player2 = prompt('Who is playing O\'s?');
-    playerO = new Player(player2, "O");
+    gameInit.playerO = new Player(player2, "O");
   },
   startGame: function(){
     gameInit.playerName();
-    activePlayer = playerX;
+    activePlayer = gameInit.playerX;
     activePlayer.display();
     board.addEventListener('click', turn.makeMove);
   }
 }
 
 var turn = {
-  markCell: function(target, targetId){
-    var marked = document.createElement('div')
+  numTurns: 0,
+  markCell: function(target){
+    target.setAttribute("class", "clicked");
+    var marked = document.createElement('div');
     marked.setAttribute("class", "picked");
     marked.textContent = activePlayer.playerId;
     target.appendChild(marked);
   },
   changeActivePlayer: function(){
-    if(activePlayer.winner){
-      return;
+
+    if(activePlayer == gameInit.playerX){
+      activePlayer = gameInit.playerO;
+    } else if(activePlayer == gameInit.playerO){
+      activePlayer = gameInit.playerX;
     }
-      if(activePlayer == playerX){
-        activePlayer = playerO;
-      } else if(activePlayer == playerO){
-        activePlayer = playerX;
-      }
-      activePlayer.display();
+    activePlayer.display();
   },
   makeMove: function(event){
     var target = event.target;
     var targetId = event.target.id.toString();
-    if(!$(target).hasClass('cell')){
+    var cellClass = target.className;
+    if(cellClass == "row"){
       return;
     }
-    if(!$(target).hasClass('picked')){
+    if(cellClass != "clicked"){
       turn.markCell(target);
+      turn.numTurns++;
       turn.checkBoard(targetId);
-      activePlayer.selectedCells.push(targetId);
-      turn.changeActivePlayer();
+      turn.checkTie();
+      if(!gameInit.gameOver){
+        activePlayer.selectedCells.push(targetId);
+        turn.changeActivePlayer();
+      }
     }
   },
   checkBoard: function(targetId){
@@ -98,19 +104,31 @@ var turn = {
       }
     }
   },
+  checkTie: function(){
+    if(turn.numTurns === 9){
+      turn.endGame();
+    }
+  },
   checkWin: function(array){
-    if(array.length === 3){
+    var thisArray = array;
+    if(thisArray.length === 3){
       activePlayer.winner = true;
       turn.endGame();
-      for(var i = 0; i < array.length; i++){
+      for(var i = 0; i < thisArray.length; i++){
       var cell = document.getElementById(array[i]);
       cell.setAttribute("class", "won");
       }
     }
   },
   endGame: function(){
-    namePlate.textContent = "Game Over: "+ activePlayer.name + " Won!";
+    if(turn.numTurns === 9){
+      namePlate.textContent = "Game Over: It was a draw!";
+    }
+    else{
+      namePlate.textContent = "Game Over: " + activePlayer.name + " Won!";
+    }
     board.removeEventListener("click", turn.makeMove);
+    gameInit.gameOver = true;
   }
 }
 
