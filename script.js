@@ -2,6 +2,15 @@ var board = document.getElementById('board');
 var namePlate = document.getElementById("namePlate");
 var activePlayer;
 
+var pageManage = {
+  hide: function(element){
+  element.setAttribute("class", "hidden");
+  },
+  show: function(element){
+    element.removeAttribute("class", "hidden");
+  }
+}
+
 function Player(name, playerId){
   this.name = name;
   this.playerId = playerId;
@@ -18,7 +27,7 @@ var gameInit = {
   playerO: null,
   newGame: function(){
     var newGame = document.getElementById('newGame');
-    newGame.removeAttribute("class", "hidden");
+    pageManage.show(newGame);
     newGame.addEventListener("submit", gameInit.startGame);
   },
   startGame: function(event){
@@ -29,7 +38,7 @@ var gameInit = {
     gameInit.setBoard();
   },
   clearBoard: function(event){
-    startNew.setAttribute("class", "hidden");
+    pageManage.hide(startNew);
     var xCells = gameInit.playerX.selectedCells;
     var oCells = gameInit.playerO.selectedCells;
     var clickedCells = xCells.concat(oCells);
@@ -44,13 +53,13 @@ var gameInit = {
     gameInit.newGame();
   },
   setBoard: function(){
-    newGame.setAttribute("class", "hidden");
+    pageManage.hide(newGame);
     activePlayer.display();
     board.addEventListener('click', turn.makeMove);
   },
   playAgain: function(){
     var startNew = document.getElementById("startNew");
-    startNew.removeAttribute("class", "hidden");
+    pageManage.show(startNew);
     startNew.addEventListener("click", gameInit.clearBoard);
   }
 }
