@@ -1,8 +1,52 @@
+body{
+  background-color: #55AA55;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Actor", sans-serif;
+}
+header{
+  text-align: center;
+  height: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: bold;
+}
+header h1{
+  font-size: 8em;
+}
+
+.hidden{
+  display: none;
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #B4E0B4;
+  width: 70%;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+input{
+  margin: 5px;
+}
 #board{
   display: flex;
   flex-direction: column;
+  align-self: center;
   align-content: center;
   flex-wrap: nowrap;
+  width: 75%;
+  margin-bottom: 5%;
 }
 
 .row{
@@ -12,11 +56,11 @@
   flex-wrap: nowrap;
 }
 
-.cell, .won{
-  background-color: #D3D3D3;
-  margin: 10px;
-  width: 100px;
-  height: 100px;
+.cell, .clicked, .won{
+  background-color: rgba(255,255,255,1);
+  margin: 1.5%;
+  width: 8vw;
+  height: 8vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,15 +69,18 @@
 .picked{
   font-size: 72px;
   font-family: sans-serif;
+  background-color: transparent;
+  pointer-events: none;
 }
 
 .won{
   background-color: yellow;
 }
 
+.name{
+  background-color: transparent;
+  height: 9vw;
+  text-align: center;
+}
 #namePlate{
-  float: left;
-  margin: 0;
-  width: 200px;
-  height: 300px;
 }

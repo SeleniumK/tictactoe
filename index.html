@@ -3,31 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Tic-Tack-To</title>
+  <title>Tic-Tack-Toe</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Actor' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <header>
+  <h1>Tic Tac Toe </h1>
 </header>
 <div class="wrapper">
-  <div id="namePlate"></div>
+  <div class="wrapper" id="name">
+    <h3 id="namePlate"></h3>
+    <form id="newGame">
+      <legend>Start A New Game!</legend>
+        <label>Player X<input type="text" name="playerX"></label>
+        <label>Player O<input type="text" name="playerO"></label>
+        <input type="submit" name="submit" value="Start Game"></label>
+    </form>
+    <div class="hidden" id="startNew">
+      <input type="button" name="playAgain" value="Play Again?">
+    </div>
+  </div>
   <div id="board">
-<!-- id = row column -->
-    <div class="row" id="r1">
-      <div class="cell c1" id="0,0"></div>
-      <div class="cell c2" id="1,0"></div>
-      <div class="cell c3" id="2,0"></div>
+<!-- id = row, column -->
+    <div class="row">
+      <div class="cell" id="0,0"></div>
+      <div class="cell" id="1,0"></div>
+      <div class="cell" id="2,0"></div>
     </div>
-    <div class="row" id="r2">
-      <div class="cell c1" id="0,1"></div>
-      <div class="cell c2"id="1,1"></div>
-      <div class="cell c3" id="2,1"></div>
+    <div class="row">
+      <div class="cell" id="0,1"></div>
+      <div class="cell" id="1,1"></div>
+      <div class="cell" id="2,1"></div>
     </div>
-    <div class="row" id="r3">
-      <div class="cell c1" id="0,2"></div>
-      <div class="cell c2" id="1,2"></div>
-      <div class="cell c3" id="2,2"></div>
+    <div class="row">
+      <div class="cell" id="0,2"></div>
+      <div class="cell" id="1,2"></div>
+      <div class="cell" id="2,2"></div>
     </div>
   </div>
 </div>
