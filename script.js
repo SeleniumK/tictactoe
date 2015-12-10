@@ -8,7 +8,7 @@ function Player(name, playerId){
   this.selectedCells = [];
   this.winner = false;
   this.display = function(){
-    namePlate.textContent = activePlayer.name + "'s Turn";
+   namePlate.textContent = activePlayer.name + "'s Turn";
   }
 }
 
@@ -16,17 +16,42 @@ var gameInit = {
   gameOver: false,
   playerX: null,
   playerO: null,
-  playerName: function(){
-    var player1 = prompt('Who is playing X\'s?');
-    gameInit.playerX = new Player(player1, "X");
-    var player2 = prompt('Who is playing O\'s?');
-    gameInit.playerO = new Player(player2, "O");
+  newGame: function(){
+    var newGame = document.getElementById('newGame');
+    newGame.removeAttribute("class", "hidden");
+    newGame.addEventListener("submit", gameInit.startGame);
   },
-  startGame: function(){
-    gameInit.playerName();
+  startGame: function(event){
+    event.preventDefault();
+    gameInit.playerX = new Player(event.target.playerX.value, "X");
+    gameInit.playerO = new Player(event.target.playerO.value, "O");
     activePlayer = gameInit.playerX;
+    gameInit.setBoard();
+  },
+  clearBoard: function(event){
+    startNew.setAttribute("class", "hidden");
+    var xCells = gameInit.playerX.selectedCells;
+    var oCells = gameInit.playerO.selectedCells;
+    var clickedCells = xCells.concat(oCells);
+    for(var i = 0; i < clickedCells.length; i++){
+      var cellHandle = document.getElementById(clickedCells[i])
+      cellHandle.setAttribute("class", "cell");
+      cellHandle.removeChild(cellHandle.firstChild);
+    }
+    namePlate.textContent = "";
+    gameInit.gameOver = false;
+    turn.numTurns = 0;
+    gameInit.newGame();
+  },
+  setBoard: function(){
+    newGame.setAttribute("class", "hidden");
     activePlayer.display();
     board.addEventListener('click', turn.makeMove);
+  },
+  playAgain: function(){
+    var startNew = document.getElementById("startNew");
+    startNew.removeAttribute("class", "hidden");
+    startNew.addEventListener("click", gameInit.clearBoard);
   }
 }
 
@@ -40,7 +65,6 @@ var turn = {
     target.appendChild(marked);
   },
   changeActivePlayer: function(){
-
     if(activePlayer == gameInit.playerX){
       activePlayer = gameInit.playerO;
     } else if(activePlayer == gameInit.playerO){
@@ -60,8 +84,8 @@ var turn = {
       turn.numTurns++;
       turn.checkBoard(targetId);
       turn.checkTie();
+      activePlayer.selectedCells.push(targetId);
       if(!gameInit.gameOver){
-        activePlayer.selectedCells.push(targetId);
         turn.changeActivePlayer();
       }
     }
@@ -129,7 +153,8 @@ var turn = {
     }
     board.removeEventListener("click", turn.makeMove);
     gameInit.gameOver = true;
+    gameInit.playAgain();
   }
 }
 
-gameInit.startGame();
+gameInit.newGame();

@@ -14,6 +14,13 @@ header{
   align-items: center;
   font-style: bold;
 }
+header h1{
+  font-size: 8em;
+}
+
+.hidden{
+  display: none;
+}
 
 .wrapper{
   display: flex;
@@ -22,6 +29,15 @@ header{
   align-items: center;
   background-color: #B4E0B4;
   width: 70%;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+input{
+  margin: 5px;
 }
 #board{
   display: flex;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Tic-Tack-To</title>
+  <title>Tic-Tack-Toe</title>
   <link rel="stylesheet" href="style.css">
   <link href='https://fonts.googleapis.com/css?family=Actor' rel='stylesheet' type='text/css'>
 </head>
@@ -12,9 +12,20 @@
   <h1>Tic Tac Toe </h1>
 </header>
 <div class="wrapper">
-  <div class="wrapper" id="name"><h3 id="namePlate"></h3></div>
+  <div class="wrapper" id="name">
+    <h3 id="namePlate"></h3>
+    <form id="newGame">
+      <legend>Start A New Game!</legend>
+        <label>Player X<input type="text" name="playerX"></label>
+        <label>Player O<input type="text" name="playerO"></label>
+        <input type="submit" name="submit" value="Start Game"></label>
+    </form>
+    <div class="hidden" id="startNew">
+      <input type="button" name="playAgain" value="Play Again?">
+    </div>
+  </div>
   <div id="board">
-<!-- id = row column -->
+<!-- id = row, column -->
     <div class="row">
       <div class="cell" id="0,0"></div>
       <div class="cell" id="1,0"></div>
