@@ -1,10 +1,9 @@
-var board = document.getElementById('board');
-var namePlate = document.getElementById("namePlate");
 var activePlayer;
 
 var pageManage = {
+  namePlate: document.getElementById("namePlate"),
   hide: function(element){
-  element.setAttribute("class", "hidden");
+    element.setAttribute("class", "hidden");
   },
   show: function(element){
     element.removeAttribute("class", "hidden");
@@ -17,7 +16,7 @@ function Player(name, playerId){
   this.selectedCells = [];
   this.winner = false;
   this.display = function(){
-   namePlate.textContent = activePlayer.name + "'s Turn";
+   pageManage.namePlate.textContent = activePlayer.name + "'s Turn";
   }
 }
 
@@ -35,37 +34,42 @@ var gameInit = {
     gameInit.playerX = new Player(event.target.playerX.value, "X");
     gameInit.playerO = new Player(event.target.playerO.value, "O");
     activePlayer = gameInit.playerX;
-    gameInit.setBoard();
-  },
-  clearBoard: function(event){
-    pageManage.hide(startNew);
-    var xCells = gameInit.playerX.selectedCells;
-    var oCells = gameInit.playerO.selectedCells;
-    var clickedCells = xCells.concat(oCells);
-    for(var i = 0; i < clickedCells.length; i++){
-      var cellHandle = document.getElementById(clickedCells[i])
-      cellHandle.setAttribute("class", "cell");
-      cellHandle.removeChild(cellHandle.firstChild);
-    }
-    namePlate.textContent = "";
-    gameInit.gameOver = false;
-    turn.numTurns = 0;
-    gameInit.newGame();
-  },
-  setBoard: function(){
-    pageManage.hide(newGame);
-    activePlayer.display();
-    board.addEventListener('click', turn.makeMove);
+    boardManage.setBoard();
   },
   playAgain: function(){
     var startNew = document.getElementById("startNew");
     pageManage.show(startNew);
-    startNew.addEventListener("click", gameInit.clearBoard);
+    startNew.addEventListener("click", function(){
+      boardManage.clearBoard();
+      gameInit.newGame();
+    });
+  }
+}
+
+var boardManage = {
+  board: document.getElementById('board'),
+  gameOver: false,
+  freeCells: document.getElementsByClassName("cell"),
+  clickedCells: [],
+  clearBoard: function(event){
+    pageManage.hide(startNew);
+    for(var i = 0; i < boardManage.clickedCells.length; i++){
+      var cellHandle = document.getElementById(boardManage.clickedCells[i]);
+      cellHandle.setAttribute("class", "cell");
+      cellHandle.removeChild(cellHandle.firstChild);
+    }
+    pageManage.namePlate.textContent = "";
+    boardManage.gameOver = false;
+    boardManage.clickedCells = [];
+  },
+  setBoard: function(){
+    pageManage.hide(newGame);
+    activePlayer.display();
+    boardManage.board.addEventListener('click', turn.makeMove);
   }
 }
 
 var turn = {
-  numTurns: 0,
   markCell: function(target){
     target.setAttribute("class", "clicked");
     var marked = document.createElement('div');
@@ -73,7 +77,14 @@ var turn = {
     marked.textContent = activePlayer.playerId;
     target.appendChild(marked);
   },
+  updateCellTrack: function(targetId, target){
+    activePlayer.selectedCells.push(targetId);
+    boardManage.clickedCells.push(targetId);
+  },
   changeActivePlayer: function(){
+    if(boardManage.gameOver){
+      return;
+    }
     if(activePlayer == gameInit.playerX){
       activePlayer = gameInit.playerO;
     } else if(activePlayer == gameInit.playerO){
@@ -90,11 +101,10 @@ var turn = {
     }
     if(cellClass != "clicked"){
       turn.markCell(target);
-      turn.numTurns++;
       turn.checkBoard(targetId);
       turn.checkTie();
-      activePlayer.selectedCells.push(targetId);
-      if(!gameInit.gameOver){
+      turn.updateCellTrack(targetId, target);
+      if(!boardManage.gameOver){
         turn.changeActivePlayer();
       }
     }
@@ -138,7 +148,7 @@ var turn = {
     }
   },
   checkTie: function(){
-    if(turn.numTurns === 9){
+    if(boardManage.clickedCells.length === 9){
       turn.endGame();
     }
   },
@@ -154,14 +164,14 @@ var turn = {
     }
   },
   endGame: function(){
-    if(turn.numTurns === 9){
-      namePlate.textContent = "Game Over: It was a draw!";
+    if(boardManage.clickedCells.length === 9){
+      pageManage.namePlate.textContent = "Game Over: It was a draw!";
     }
     else{
-      namePlate.textContent = "Game Over: " + activePlayer.name + " Won!";
+      pageManage.namePlate.textContent = "Game Over: " + activePlayer.name + " Won!";
     }
-    board.removeEventListener("click", turn.makeMove);
-    gameInit.gameOver = true;
+    boardManage.board.removeEventListener("click", turn.makeMove);
+    boardManage.gameOver = true;
     gameInit.playAgain();
   }
 }
