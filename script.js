@@ -77,7 +77,7 @@ var turn = {
     marked.textContent = activePlayer.playerId;
     target.appendChild(marked);
   },
-  updateCellTrack: function(targetId, target) {
+  updateCellTrack: function(targetId) {
     activePlayer.selectedCells.push(targetId);
     boardManage.clickedCells.push(targetId);
   },
@@ -102,8 +102,8 @@ var turn = {
     if (cellClass != "clicked") {
       turn.markCell(target);
       turn.checkBoard(targetId);
+      turn.updateCellTrack(targetId);
       turn.checkTie();
-      turn.updateCellTrack(targetId, target);
       if (!boardManage.gameOver) {
         turn.changeActivePlayer();
       }
