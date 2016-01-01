@@ -1,12 +1,12 @@
-body{
-  background-color: #55AA55;
+body {
+  background-color: #aa5555;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: "Actor", sans-serif;
 }
-header{
+header {
   text-align: center;
   height: 10vw;
   display: flex;
@@ -14,15 +14,13 @@ header{
   align-items: center;
   font-style: bold;
 }
-header h1{
+header h1 {
   font-size: 8em;
 }
-
-.hidden{
+.hidden {
   display: none;
 }
-
-.wrapper{
+.wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,16 +28,16 @@ header h1{
   background-color: #B4E0B4;
   width: 70%;
 }
-form{
+form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
 }
-input{
+input {
   margin: 5px;
 }
-#board{
+#board {
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -48,16 +46,14 @@ input{
   width: 75%;
   margin-bottom: 5%;
 }
-
-.row{
+.row {
   display: flex;
   justify-content: center;
   flex-direction: row;
   flex-wrap: nowrap;
 }
-
-.cell, .clicked, .won{
-  background-color: rgba(255,255,255,1);
+.cell, .clicked, .won {
+  background-color: rgba(255, 255, 255, 1);
   margin: 1.5%;
   width: 8vw;
   height: 8vw;
@@ -65,22 +61,18 @@ input{
   justify-content: center;
   align-items: center;
 }
-
-.picked{
+.picked {
   font-size: 72px;
   font-family: sans-serif;
   background-color: transparent;
   pointer-events: none;
 }
-
-.won{
+.won {
   background-color: yellow;
 }
-
-.name{
+.name {
   background-color: transparent;
   height: 9vw;
   text-align: center;
 }
-#namePlate{
-}
+#namePlate {}
